@@ -5,12 +5,12 @@ const groupSchema = new mongoose.Schema(
     name: { type: String, required: true },
     leaderId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
       required: true,
     },
-    members: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    members: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Group", groupSchema);
+module.exports = mongoose.model("group", groupSchema);

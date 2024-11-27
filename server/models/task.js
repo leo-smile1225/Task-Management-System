@@ -11,11 +11,15 @@ const taskSchema = new mongoose.Schema(
     },
     groupId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Group",
+      ref: "group",
       required: true,
     },
+    // completed_level: {
+    //   type: Number,
+    //   required: true,
+    // }
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Task", taskSchema);
+module.exports = mongoose.model("task", taskSchema);

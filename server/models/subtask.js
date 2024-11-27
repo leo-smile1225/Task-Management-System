@@ -11,12 +11,12 @@ const subtaskSchema = new mongoose.Schema(
     },
     taskId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Task",
+      ref: "task",
       required: true,
     }, // Reference to the Task
-    assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Optional: if subtasks can be assigned to users
+    assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "user" }, // Optional: if subtasks can be assigned to users
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Subtask", subtaskSchema);
+module.exports = mongoose.model("subtask", subtaskSchema);

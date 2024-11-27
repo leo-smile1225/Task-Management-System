@@ -1,33 +1,56 @@
 const User = require("../models/user");
 const moment = require("moment");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const config = require("../config/secretkey");
 
-const login = async (req, res) => {
+const signin = async (req, res, next) => {
   try {
-    const { username, password } = req.body;
-    console.log(req.body);
-
-    const user = await User.findOne({ username });
-    if (!user)
-      return res.json({ msg: "Incorrect Username or Password", status: false });
-    const isPasswordValid = password == user.password;
-    if (!isPasswordValid)
-      return res.json({ msg: "Incorrect Username or Password", status: false });
-    delete user.password;
-    return res.json({ status: true, user });
+    const { data } = await User.findOne({
+      username: req.body.username,
+    });
+    if (!data) {
+      const passwordIsValid = await bcrypt.compareSync(
+        req.body.password,
+        user.password
+      );
+      if (!passwordIsValid) {
+        return res.status(401).send({ message: "invalid Password!" });
+      } else {
+        const token = await jwt.sign({ _id: data.id }, config.secret, {
+          algorithm: "HS256",
+          allowInsecureKeySizes: true,
+          expiresIn: 86400, // 24 hours
+        });
+        res.status(200).json({ token });
+      }
+    } else  return res.status(404).json({ message: "User Not Found." });
   } catch (error) {
     next(error);
   }
-
 };
 
-const register = async (req, res) => {
+const signup = async (req, res) => {
   try {
     const user = await new User({
       username: req.body.username,
-      password: req.body.password,
+      email: req.body.email,
+      avartar: req.body.avartar,
+      password: bcrypt.hashSync(req.body.password, 8),
+      status: {
+        currentStatus: req.body.currentStatus,
+        currentEarning: req.body.currentEarning,
+        expectedEarning: req.body.expectedEarning,
+      },
+      role: req.body.role,
+      groupId: req.body.groupId,
+      allowed: req.body.allow,
     });
     await user.save();
-    res.status(200).json({ message: "added!", status: true });
+    res.status(200).json({
+      message: "Added successfully! Wait for allowing!",
+      status: true,
+    });
   } catch (err) {
     console.log(err);
     if (err.code == "11000") {
@@ -35,6 +58,23 @@ const register = async (req, res) => {
     } else {
       res.send({ status: "err", message: err });
     }
+  }
+};
+
+const allowUser = async (req, res) => {
+  try {
+    const data = req.body;
+    const group = await user.find({ groupId: data.groupId });
+    const user = await group.findByIdAndUpdate(data._id, {
+      allowed: data.allowed,
+    });
+    await user.save();
+    res.status(200).json({
+      message: "Your action was performed successfully",
+      status: true,
+    });
+  } catch (err) {
+    res.send({ status: "err", message: err });
   }
 };
 
@@ -51,7 +91,8 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 module.exports = {
-  login,
-  register,
+  signin,
+  allowUser,
+  signup,
   getAllUsers,
 };

@@ -11,6 +11,7 @@
   :root {
     --background: #424242;
     --foreground: #ededed;
+    box-sizing: border-box;
   }
 }
 

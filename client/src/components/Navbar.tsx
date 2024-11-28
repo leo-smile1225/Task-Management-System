@@ -1,16 +1,19 @@
 "use client";
-import { getUrl } from "@/untile";
+import { getUrl } from "@/utils/untile";
 import { MenuOutlined, MoreOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { usePathname } from "next/navigation";
-import { useContext } from "react";
-import { SideContext } from "@/context/main";
+import useAuth from "@/hook/useAuth";
+import useSide from "@/hook/useSide";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const path = usePathname();
-  const { setShow } = useContext(SideContext);
+  const { isLoggedIn } = useAuth();
+  const { setShow } = useSide();
+
+  if (!isLoggedIn) return <></>;
   return (
-    <div className="bg-[#3F51B5] w-full h-[60px] flex justify-between text-[32px] px-[52px] items-center">
+    <div className="bg-[#3F51B5] w-full h-[60px] flex justify-between text-[32px] px-[32px] items-center">
       <Button
         type="primary"
         className="bg-transparent"

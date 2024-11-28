@@ -1,34 +1,40 @@
 const express = require("express");
-const app = express();
+const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const passport = require("passport");
+
+const users = require("./routes/api/users");
+const profile = require("./routes/api/profile");
+const posts = require("./routes/api/posts");
 var cors = require("cors");
-const mongooseConnection = require("./helpers/mongoose-connection");
-const appRoutes = require("./routes");
-const socket = require("socket.io");
-app.use(bodyParser.urlencoded());
+
+const app = express();
+
+// Body parser middleware
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use("/api", appRoutes);
+// DB Config
+const db = require("./config/keys").mongoURI;
 
-app.use((_, res) => {
-  res.send({
-    message: "Not found!",
-  });
-});
+// Connect to MongoDB
+mongoose
+  .connect(db, { useNewUrlParser: true })
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.warn(err));
 
-mongooseConnection();
-const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
-  console.log(`Server running on Port ${PORT}`);
-});
+// Passport middleware
+app.use(passport.initialize());
 
-const io = socket(server, {
-  cors: {
-    origin: "*",
-    credentials: true,
-  },
-});
+// Passport Config
+require("./config/passport")(passport);
 
-const onlineUsers = new Map();
+// Use routes
+app.use("/api/users", users);
+app.use("/api/posts", posts);
+app.use("/api/profile", profile);
 
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => console.log(`Server running on port ${port}`));

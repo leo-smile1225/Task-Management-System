@@ -4,9 +4,9 @@ import {
   LockOutlined,
   MailOutlined,
   UserOutlined,
-  UserSwitchOutlined,
+  //   UserSwitchOutlined,
 } from "@ant-design/icons";
-import { Select } from "antd";
+// import { Select } from "antd";
 
 import { Button, Input } from "antd";
 import { useEffect, useState } from "react";
@@ -15,8 +15,8 @@ const Register = () => {
     email: "",
     username: "",
     password: "",
-    passwordcon: "",
-    role: "",
+    password2: "",
+    // role: "",
   });
   const handleStateChange = (
     event: React.ChangeEvent<
@@ -31,14 +31,14 @@ const Register = () => {
   const handleSub = () => {
     authRegister(userdata);
   };
-  const handleChange = (value: string) => {
-    setUserdata({ ...userdata, role: value });
-  };
+  //   const handleChange = (value: string) => {
+  //     setUserdata({ ...userdata, role: value });
+  //   };
   return (
     <div className="w-full bg-[#999999] h-[932px]">
       <p className="text-[32px] text-center pt-[131px]">Sign Up</p>
       <div className="px-[50] flex flex-col gap-[50] mt-[39px]">
-        <div className="flex  border-[1px] border-white rounded-[10px]">
+        {/* <div className="flex  border-[1px] border-white rounded-[10px]">
           <UserSwitchOutlined className="border-r border-r-white px-[15px]" />
           <Select
             className="bg-transparent w-full h-[50px] text-[16px] border-0 rounded-tr-[10px] rounded-tl-none rounded-bl-none text-white focus:bg-transparent"
@@ -49,14 +49,14 @@ const Register = () => {
               { value: "member", label: "Group Member" },
             ]}
           />
-        </div>
+        </div> */}
         <div className="flex  border-[1px] border-white rounded-[10px]">
           <UserOutlined className="border-r border-r-white px-[15px]" />
           <Input
             className="bg-transparent h-[50px] text-[16px] border-0 rounded-tr-[10px] rounded-tl-none rounded-bl-none text-white focus:bg-transparent"
-            placeholder="Email"
-            name="email"
-            value={userdata.email}
+            placeholder="Username"
+            name="username"
+            value={userdata.username}
             onChange={handleStateChange}
           />
         </div>
@@ -64,10 +64,10 @@ const Register = () => {
           <MailOutlined className="border-r border-r-white px-[15px]" />
           <Input
             className="bg-transparent h-[50px] text-[16px] border-0 rounded-tr-[10px] rounded-tl-none rounded-bl-none text-white focus:bg-transparent"
-            placeholder="Username"
-            value={userdata.username}
+            value={userdata.email}
+            placeholder="Email"
+            name="email"
             onChange={handleStateChange}
-            name="username"
           />
         </div>
 
@@ -88,8 +88,8 @@ const Register = () => {
             className="bg-transparent h-[50px] text-[16px] border-0 rounded-tr-[10px] rounded-tl-none rounded-bl-none text-white focus:bg-transparent"
             type="password"
             placeholder="Password"
-            name="passwordcon"
-            value={userdata.passwordcon}
+            name="password2"
+            value={userdata.password2}
             onChange={handleStateChange}
           />
         </div>

@@ -1,8 +1,14 @@
+"use client";
 import { authLogin } from "@/actions/authAcion";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Input } from "antd";
 import { useEffect, useState } from "react";
+import { notification } from "antd";
+import useAuth from "@/hook/useAuth";
+import { useRouter } from "next/navigation";
 export default function Login() {
+  const { login } = useAuth();
+  const navigate = useRouter();
   const [userdata, setUserdata] = useState({
     email: "",
     password: "",
@@ -13,12 +19,26 @@ export default function Login() {
   useEffect(() => {
     console.log(userdata);
   }, [userdata]);
-  const handleSub = () => {
-    authLogin(userdata);
+  const handleSub = async () => {
+    const res = await authLogin(userdata);
+    console.log(res);
+    if (res) {
+      await login(res);
+      navigate.push("/profile");
+      notification.success({
+        message: "Information",
+        description: "Successed Register",
+      });
+    } else {
+      notification.warning({
+        message: "Information",
+        description: "Failed Register",
+      });
+    }
   };
   return (
     <div className="w-full bg-[#999999] h-[932px]">
-      <p className="text-[32px] text-center pt-[131px]">Sign Up</p>
+      <p className="text-[32px] text-center pt-[131px]">Sign In</p>
       <div className="px-[50] flex flex-col gap-[50] mt-[234px]">
         <div className="flex border-[1px] border-white rounded-[10px]">
           <MailOutlined className="border-r border-r-white px-[15px]" />

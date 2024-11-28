@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
       currentEarning: { type: Number, default: 0 },
       expectedEarning: { type: Number, default: 0 },
     },
-    groupId: { type: mongoose.Schema.Types.ObjectId, ref: "group" },
+    // groupId: { type: mongoose.Schema.Types.ObjectId, ref: "group" },
     allowed: { type: Boolean, default: false },
   },
   { timestamps: true }

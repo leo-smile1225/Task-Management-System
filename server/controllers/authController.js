@@ -24,7 +24,7 @@ const signin = async (req, res, next) => {
         });
         res.status(200).json({ token });
       }
-    } else  return res.status(404).json({ message: "User Not Found." });
+    } else return res.status(404).json({ message: "User Not Found." });
   } catch (error) {
     next(error);
   }
@@ -65,25 +65,40 @@ const allowUser = async (req, res) => {
   try {
     const data = req.body;
     const group = await user.find({ groupId: data.groupId });
-    const user = await group.findByIdAndUpdate(data._id, {
+    const suser = await group.findByIdAndUpdate(data._id, {
       allowed: data.allowed,
     });
-    await user.save();
-    res.status(200).json({
-      message: "Your action was performed successfully",
-      status: true,
-    });
+    if (suser) {
+      res.status(200).json({
+        message: "Your action was performed successfully",
+        status: true,
+      });
+    } else return res.status(400).json({ message: "Your action failed!" });
   } catch (err) {
     res.send({ status: "err", message: err });
   }
 };
 
+const updateUser = async (req, res) => {
+  try {
+    const { data } = req.body;
+    const suser = User.findByIdAndUpdate(data._id, {
+      status: {
+        currentStatus: req.body.currentStatus,
+        currentEarning: req.body.currentEarning,
+        expectedEarning: req.body.expectedEarning,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find({ _id: { $ne: req.params.id } }).select([
       "_id",
       "username",
-      "avatarImage",
+      "avatar",
     ]);
     return res.json(users);
   } catch (error) {
@@ -94,5 +109,6 @@ module.exports = {
   signin,
   allowUser,
   signup,
+  updateUser,
   getAllUsers,
 };

@@ -1,4 +1,5 @@
 "use client";
+import { setCurrentUser } from "@/actions/authAcion";
 import useAuth from "@/hook/useAuth";
 import {
   MailOutlined,
@@ -7,8 +8,13 @@ import {
   UserSwitchOutlined,
 } from "@ant-design/icons";
 import { Avatar, Input, Flex, Select, Button } from "antd";
+import { useEffect } from "react";
 const Setting = () => {
-  const { user } = useAuth();
+  const { user, login } = useAuth();
+  useEffect(() => {
+    const user = setCurrentUser();
+    login(user);
+  }, []);
   return (
     <div>
       <div className="bg-[#333333] flex gap-2 m-5 justify-between p-5 rounded-xl">
@@ -23,7 +29,7 @@ const Setting = () => {
           <Input
             placeholder="UserName"
             name="username"
-            prefix={< UserSwitchOutlined/>}
+            prefix={<UserSwitchOutlined />}
             value={user?.username}
           />
           <Select
@@ -54,16 +60,20 @@ const Setting = () => {
           </Button>
         </Flex>
       </div>
-      <div className="bg-[#333333] flex gap-2 m-5 justify-between p-5 rounded-xl">
-        <Input
-          placeholder="Input new group name"
-          name="newgroupame"
-          prefix={<UsergroupAddOutlined />}
-        />
-        <Button type="primary" variant="solid">
-          Create Group
-        </Button>
-      </div>
+      {user?.role == "leader" ? (
+        <div className="bg-[#333333] flex gap-2 m-5 justify-between p-5 rounded-xl">
+          <Input
+            placeholder="Input new group name"
+            name="newgroupame"
+            prefix={<UsergroupAddOutlined />}
+          />
+          <Button type="primary" variant="solid">
+            Create Group
+          </Button>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

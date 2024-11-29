@@ -4,8 +4,11 @@ export const getUrl = (url: string) => {
   else if (url.includes("register")) return "Register";
   else if (url.includes("profile")) return "Profile";
   else if (url.includes("setting")) return "Setting";
+  else if (url.includes("dashboard")) return "DashBoard";
+  else if (url.includes("setting")) return "Setting";
+  else if (url.includes("setting")) return "Setting";
 };
 
-export const BackendURL = "http://127.0.0.1:5000/api";
-export const LoginURL = BackendURL + "/users/login";
-export const RegisterURL = BackendURL + "/users/register";
+export const BackendURL = "http://192.168.142.171:5000/api";
+export const LoginURL = BackendURL + "/auth/signin";
+export const RegisterURL = BackendURL + "/auth/signup";

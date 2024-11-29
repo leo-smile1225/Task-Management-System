@@ -16,17 +16,13 @@ interface userLogInterface {
 export const authRegister = async (userdata: userRegInterface) => {
   const { data } = await axios.post(RegisterURL, userdata);
   console.log(JSON.stringify(data));
-  if (data.user) {
-    return true;
-  } else {
-    return false;
-  }
+  return data;
 };
 
 export const authLogin = async (userdata: userLogInterface) => {
   const { data } = await axios.post(LoginURL, userdata);
   console.log(data);
-  if (data.success) {
+  if (data.token) {
     const decoded = jwtDecode(data.token);
     setAuthToken(data.token);
     setSession(data.token);
@@ -34,7 +30,7 @@ export const authLogin = async (userdata: userLogInterface) => {
   } else {
     setAuthToken("");
     setSession("");
-    return null;
+    return data.message;
   }
 };
 const setSession = (serviceToken?: string | null) => {
@@ -42,6 +38,15 @@ const setSession = (serviceToken?: string | null) => {
     localStorage.setItem("usertoken", serviceToken);
   } else {
     localStorage.removeItem("usertoken");
+  }
+};
+export const setCurrentUser = () => {
+  const storedData = localStorage.getItem("usertoken");
+  console.log("=>", storedData);
+  const decoded = jwtDecode(storedData);
+
+  if (storedData) {
+    return decoded;
   }
 };
 

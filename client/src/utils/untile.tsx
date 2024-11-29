@@ -5,7 +5,7 @@ export const getUrl = (url: string) => {
   else if (url.includes("profile")) return "Profile";
   else if (url.includes("setting")) return "Setting";
   else if (url.includes("dashboard")) return "DashBoard";
-  else if (url.includes("setting")) return "Setting";
+  else if (url.includes("admin")) return "Admin";
   else if (url.includes("setting")) return "Setting";
 };
 

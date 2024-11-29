@@ -37,6 +37,54 @@ const Sidebar: React.FC = () => {
       label: <Link href="#">Sign Out</Link>,
     },
   ];
+  const adminitems = [
+    {
+      key: 0,
+      label: <Link href="/admin">Admin</Link>,
+    },
+    {
+      key: 1,
+      label: <Link href="/setting">Setting</Link>,
+    },
+  ];
+  const leaderitems = [
+    {
+      key: 0,
+      label: <Link href="/profile">Profile</Link>,
+    },
+    {
+      key: 1,
+      label: <Link href="/dashboard">Dashboard</Link>,
+    },
+    {
+      key: 2,
+      label: <Link href="/notification">Notification</Link>,
+    },
+    {
+      key: 3,
+      label: <Link href="/tasks">Tasks</Link>,
+    },
+    {
+      key: 5,
+      label: <Link href="/calendar">Calendar</Link>,
+    },
+    {
+      key: 6,
+      label: <Link href="/setting">Setting</Link>,
+    },
+    {
+      key: 7,
+      label: <Link href="/taskmanagement">Task Management</Link>,
+    },
+    {
+      key: 8,
+      label: <Link href="/usermanagement">User Management</Link>,
+    },
+    {
+      key: 9,
+      label: <Link href="#">Sign Out</Link>,
+    },
+  ];
   const { isSideview, setShow } = useSide();
   const { user } = useAuth();
   if (!isSideview) return <></>;
@@ -56,7 +104,13 @@ const Sidebar: React.FC = () => {
           </div>
           <Menu
             className="bg-transparent text-[22px] mt-[20px]"
-            items={items}
+            items={
+              user?.role == "admin"
+                ? adminitems
+                : user?.role == "leader"
+                ? leaderitems
+                : items
+            }
             theme="dark"
             defaultSelectedKeys={["0"]}
             onClick={() => setShow(false)}

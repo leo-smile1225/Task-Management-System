@@ -9,6 +9,4 @@ router.use("/auth", authRouter);
 router.use("/task", taskRouter);
 router.use("/user", userRouter);
 
-
-
 module.exports = router;

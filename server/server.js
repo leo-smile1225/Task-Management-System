@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 const app = express();
 const bodyParser = require("body-parser");
 var cors = require("cors");
@@ -9,6 +10,11 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use(cors());
 
+// Passport middleware
+app.use(passport.initialize());
+
+// Passport Config
+require("./middleware/passport")(passport);
 app.use("/api", appRoutes);
 
 app.use((_, res) => {
@@ -31,4 +37,3 @@ const io = socket(server, {
 });
 
 const onlineUsers = new Map();
-

@@ -20,7 +20,7 @@ const Register = () => {
     username: "",
     password: "",
     password2: "",
-    role: "",
+    role: "member",
   });
   const handleStateChange = (
     event: React.ChangeEvent<
@@ -40,9 +40,9 @@ const Register = () => {
       alert(res.error);
     }
   };
-    const handleChange = (value: string) => {
-      setUserdata({ ...userdata, role: value });
-    };
+  const handleChange = (value: string) => {
+    setUserdata({ ...userdata, role: value });
+  };
   return (
     <ConfigProvider
       theme={{
@@ -87,7 +87,7 @@ const Register = () => {
             <UserSwitchOutlined className="border-r border-r-white px-[15px]" />
             <Select
               className="w-full h-[50px] text-[16px] border-0 rounded-tr-[10px] rounded-tl-none rounded-bl-none"
-              defaultValue="GroupMember"
+              defaultValue="member"
               onChange={handleChange}
               options={[
                 { value: "leader", label: "Group Leader" },

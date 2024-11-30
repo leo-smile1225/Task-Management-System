@@ -7,8 +7,21 @@ export const getUrl = (url: string) => {
   else if (url.includes("dashboard")) return "DashBoard";
   else if (url.includes("admin")) return "Admin";
   else if (url.includes("setting")) return "Setting";
+  else if (url.includes("report")) return "Report";
+  else if (url.includes("membermanagement")) return "User management";
+  else if (url.includes("taskmanagement")) return "Task management";
 };
 
-export const BackendURL = "http://192.168.142.171:5000/api";
+export const BackendURL = "http://127.0.0.1:5000/api";
+// export const BackendURL = "http://192.168.142.171:5000/api";
 export const LoginURL = BackendURL + "/auth/signin";
 export const RegisterURL = BackendURL + "/auth/signup";
+export const getAllUsersURL = BackendURL + "/auth/getAllUsers";
+export const allowUserURL = BackendURL + "/auth/allowUser";
+
+export const groupcreateURL = BackendURL + "/auth/createGroup";
+export const getAllGroupURL = BackendURL + "/auth/getAllGroup";
+export const reportSaveURL = BackendURL + "/auth/reportSave";
+export const getReportURL = BackendURL + "/auth/getReport";
+export const deleteReportURL = BackendURL + "/auth/delReport";
+export const updateUserURL = BackendURL + "/auth/updateUser";

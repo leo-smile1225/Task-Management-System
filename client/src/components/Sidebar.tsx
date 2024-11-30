@@ -7,6 +7,8 @@ import useSide from "@/hook/useSide";
 import useAuth from "@/hook/useAuth";
 
 const Sidebar: React.FC = () => {
+  const { isSideview, setShow } = useSide();
+  const { user, logout } = useAuth();
   const items = [
     {
       key: 0,
@@ -34,7 +36,11 @@ const Sidebar: React.FC = () => {
     },
     {
       key: 7,
-      label: <Link href="#">Sign Out</Link>,
+      label: (
+        <Link href="#" onClick={logout}>
+          Sign Out
+        </Link>
+      ),
     },
   ];
   const adminitems = [
@@ -78,15 +84,21 @@ const Sidebar: React.FC = () => {
     },
     {
       key: 8,
-      label: <Link href="/usermanagement">User Management</Link>,
+      label: <Link href="/membermanagement">User Management</Link>,
     },
     {
       key: 9,
-      label: <Link href="#">Sign Out</Link>,
+      label: <Link href="/report">Report</Link>,
+    },
+    {
+      key: 10,
+      label: (
+        <Link href="#" onClick={logout}>
+          Sign Out
+        </Link>
+      ),
     },
   ];
-  const { isSideview, setShow } = useSide();
-  const { user } = useAuth();
   if (!isSideview) return <></>;
   else
     return (

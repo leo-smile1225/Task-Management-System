@@ -51,6 +51,8 @@ const signin = async (req, res, next) => {
 
 const signup = async (req, res) => {
   try {
+    console.log(req.body);
+
     const user = await new User({
       username: req.body.username,
       email: req.body.email,

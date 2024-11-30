@@ -1,29 +1,10 @@
 "use client";
+import {
+  AppProviderProps,
+  ContextProps,
+  UserProps,
+} from "@/utils/interfacelist";
 import React, { createContext, useState, ReactNode } from "react";
-
-interface AppProviderProps {
-  children: ReactNode;
-}
-
-interface UserProps {
-  _id?: string;
-  username?: string;
-  email?: string;
-  role?:string,
-  status?: {
-    currentStatus?: string;
-    currentEarning?: string;
-    expectedEarning?: string;
-  };
-  groupID?: string;
-}
-
-interface ContextProps {
-  isLoggedIn: boolean;
-  user: UserProps | null;
-  login: (user: UserProps) => void;
-  logout: () => void;
-}
 
 export const AuthContext = createContext<ContextProps | undefined>(undefined);
 
@@ -39,6 +20,7 @@ export const AuthProvider: React.FC<AppProviderProps> = ({ children }) => {
   const logout = () => {
     setIsLoggedIn(false);
     setUser(null);
+    localStorage.setItem("usertoken", "");
   };
 
   return (

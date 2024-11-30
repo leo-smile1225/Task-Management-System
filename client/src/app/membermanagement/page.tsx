@@ -2,38 +2,7 @@
 import React, { useEffect, useState } from "react";
 import EditMember from "./editmember";
 import axios from "axios";
-
-const BackendURL: string = "http://192.168.142.171:5000/api/auth";
-
-// const userData = [
-//   {
-//     id: "1",
-//     username: "first",
-//     status: {
-//       currentStatus: "working",
-//       currentEarning: "120",
-//       expectedEarning: "300",
-//     },
-//   },
-//   {
-//     id: "2",
-//     username: "second",
-//     status: {
-//       currentStatus: "patient",
-//       currentEarning: "120",
-//       expectedEarning: "300",
-//     },
-//   },
-//   {
-//     id: "3",
-//     username: "third",
-//     status: {
-//       currentStatus: "penalty",
-//       currentEarning: "120",
-//       expectedEarning: "300",
-//     },
-//   },
-// ];
+import { getAllUsersURL } from "@/utils/untile";
 
 export interface ChildProps {
   _id: string;
@@ -50,7 +19,7 @@ export default function MemberManagement() {
 
   useEffect(() => {
     const getUser = async () => {
-      const { data } = await axios.get(BackendURL + "/getAllUsers");
+      const { data } = await axios.post(getAllUsersURL, { type: "mng" });
       setUserData(data);
     };
     getUser();

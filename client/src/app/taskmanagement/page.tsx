@@ -2,8 +2,11 @@
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { Button, ConfigProvider, Layout, Modal, Table, Tooltip } from "antd";
 import { Content } from "antd/es/layout/layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { TableColumnProps } from "antd";
+import useAuth from "@/hook/useAuth";
+import { setCurrentUser } from "@/actions/authAcion";
+import { useRouter } from "next/navigation";
 
 interface DataType {
   _id: string;
@@ -12,8 +15,19 @@ interface DataType {
 }
 
 export default function TaskManagement() {
+  const router = useRouter();
+  const { isLoggedIn, user, login } = useAuth();
   const [viewTaskModalVisible, setViewTaskModalVisible] = useState(false);
   const [viewTask, setViewTask] = useState<DataType | null>(null);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.push("/"); // Redirect to home if not authenticated
+    } else {
+      const user = setCurrentUser();
+      login(user);
+    }
+  }, [isLoggedIn, login, router]);
 
   const columns: TableColumnProps<DataType>[] = [
     {
@@ -59,6 +73,7 @@ export default function TaskManagement() {
       },
     },
   ];
+
   const tasks = [
     {
       _id: "1231123",

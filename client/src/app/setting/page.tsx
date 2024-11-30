@@ -15,6 +15,7 @@ const Setting = () => {
     const user = setCurrentUser();
     login(user);
   }, []);
+
   return (
     <div>
       <div className="bg-[#333333] flex gap-2 m-5 justify-between p-5 rounded-xl">

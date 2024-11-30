@@ -5,36 +5,6 @@ import axios from "axios";
 
 const BackendURL: string = "http://192.168.142.171:5000/api/auth";
 
-// const userData = [
-//   {
-//     id: "1",
-//     username: "first",
-//     status: {
-//       currentStatus: "working",
-//       currentEarning: "120",
-//       expectedEarning: "300",
-//     },
-//   },
-//   {
-//     id: "2",
-//     username: "second",
-//     status: {
-//       currentStatus: "patient",
-//       currentEarning: "120",
-//       expectedEarning: "300",
-//     },
-//   },
-//   {
-//     id: "3",
-//     username: "third",
-//     status: {
-//       currentStatus: "penalty",
-//       currentEarning: "120",
-//       expectedEarning: "300",
-//     },
-//   },
-// ];
-
 export interface ChildProps {
   _id: string;
   username: string;
@@ -54,7 +24,7 @@ export default function MemberManagement() {
       setUserData(data);
     };
     getUser();
-    console.log("12");
+    // console.log("12");
   }, []);
 
   const [filterText, setFilterText] = useState<string>("");

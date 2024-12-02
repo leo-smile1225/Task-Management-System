@@ -4,6 +4,8 @@ import { ConfigProvider, Switch, Table } from "antd";
 import type { TableColumnsType } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { allowUser, getAllUser } from "@/actions/adminAcion";
+import { setCurrentUser } from "@/actions/authAcion";
+import setAuthToken from "@/utils/setAuthToken";
 
 const App: React.FC = () => {
   const [dataSource, setData] = useState<DataType[]>([]); // Initialize as an empty array
@@ -62,6 +64,8 @@ const App: React.FC = () => {
   ];
 
   useEffect(() => {
+    // const d: string | null = localStorage.getItem("usertoken");
+    // setAuthToken(d);
     const fetchData = async () => {
       try {
         const res = await getAllUser("");

@@ -23,7 +23,7 @@ export default function MemberManagement() {
       setUserData(data);
     };
     getUser();
-    console.log("12");
+    // console.log("12");
   }, []);
 
   const [filterText, setFilterText] = useState<string>("");

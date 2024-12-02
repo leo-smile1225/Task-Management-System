@@ -81,6 +81,7 @@ const EditMember: React.FC<{ current: ChildProps | null }> = ({ current }) => {
         openNotificationWithIcon("error", "Failed to update user.");
       }
     } catch (error) {
+      console.log(error);
       openNotificationWithIcon(
         "error",
         "An error occurred while updating user."

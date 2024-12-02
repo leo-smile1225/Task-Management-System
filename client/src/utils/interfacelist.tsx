@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { JwtPayload } from "jwt-decode";
 
 export interface AppProviderProps {
   children: ReactNode;
@@ -14,6 +15,7 @@ export interface UserProps {
     currentEarning?: string;
     expectedEarning?: string;
   };
+  avatar?: string;
 }
 
 export interface ContextProps {
@@ -60,6 +62,19 @@ export interface PayProps {
   decoded?: any;
 }
 
-export interface GetuserProps { 
-  decoded?:any | null
+export interface GetuserProps {
+  decoded?: any | null;
+}
+
+export interface TaskPropsItem {
+  title: string;
+  description: string;
+}
+export interface newUser extends UserProps {
+  exp: number;
+}
+
+export interface upTaskProps {
+  _id: string;
+  status: string;
 }

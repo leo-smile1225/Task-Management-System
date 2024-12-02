@@ -1,10 +1,12 @@
 "use client";
 import { Select } from "antd";
+import { MemberType } from "../taskmanagement/createtask";
+import React, { SetStateAction } from "react";
 
 export default function TaskSelect(props: {
-  taskList: { value: string; label: string }[];
-  currentTask: string;
-  setCurrentTask: any;
+  taskList: MemberType[];
+  currentTaskId: string;
+  setCurrentTaskId: React.Dispatch<SetStateAction<string>>;
 }) {
   return (
     <Select
@@ -12,8 +14,8 @@ export default function TaskSelect(props: {
       style={{ width: "100%" }}
       placeholder="Search to Select"
       optionFilterProp="label"
-      value={props.currentTask}
-      onChange={(item) => props.setCurrentTask(item)}
+      value={props.currentTaskId}
+      onChange={(item) => props.setCurrentTaskId(item)}
       filterSort={(optionA, optionB) =>
         (optionA?.label ?? "")
           .toLowerCase()

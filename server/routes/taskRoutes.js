@@ -45,32 +45,18 @@ taskRouter
     passport.authenticate("jwt", { session: false }),
     taskManagement.getPercent
   );
-taskRouter.route("/getAllSubtask/:id").get(
-  // passport.authenticate("jwt", { session: false }),
-  taskManagement.getSubTaskItem
-);
+taskRouter
+  .route("/getAllSubtask/:id")
+  .get(
+    passport.authenticate("jwt", { session: false }),
+    taskManagement.getSubTaskItem
+  );
 
-// taskRouter
-//   .route("/divide")
-//   .post(
-//     passport.authenticate("jwt", { session: false }),
-//     taskManagement.createSubtask
-//   );
-taskRouter.route("/get").post(
-  // passport.authenticate("jwt", { session: false }),
-  taskManagement.getTask
-);
-// taskRouter
-//   .route("/update")
-//   .post(
-//     passport.authenticate("jwt", { session: false }),
-//     taskManagement.updateTasks
-//   );
-// taskRouter
-//   .route("/delete/:id")
-//   .delete(
-//     passport.authenticate("jwt", { session: false }),
-//     taskManagement.deleteTask
-// );
+taskRouter
+  .route("/get")
+  .post(
+    passport.authenticate("jwt", { session: false }),
+    taskManagement.getTask
+  );
 
 module.exports = taskRouter;

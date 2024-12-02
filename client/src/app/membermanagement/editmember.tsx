@@ -3,8 +3,7 @@ import React, { useState, useEffect } from "react";
 import { ChildProps } from "./page";
 import { Button, notification } from "antd";
 import axios from "axios";
-
-const BackendURL: string = "http://192.168.142.171:5000/api/auth";
+import { updateUserURL } from "@/utils/untile";
 
 const EditMember: React.FC<{ current: ChildProps | null }> = ({ current }) => {
   const [changeUser, setChangeUser] = useState<ChildProps | null>(null);
@@ -13,6 +12,7 @@ const EditMember: React.FC<{ current: ChildProps | null }> = ({ current }) => {
 
   useEffect(() => {
     setChangeUser(current);
+    console.log(current);
   }, [current]);
 
   const onChangeCurrentEarning = (
@@ -74,7 +74,7 @@ const EditMember: React.FC<{ current: ChildProps | null }> = ({ current }) => {
     };
 
     try {
-      const response = await axios.post(`${BackendURL}/updateuser`, changeUser);
+      const response = await axios.post(updateUserURL, changeUser);
       if (response.status === 200) {
         openNotificationWithIcon("success", "User updated successfully.");
       } else {

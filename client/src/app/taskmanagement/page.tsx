@@ -4,30 +4,37 @@ import { Button, ConfigProvider, Layout, Modal, Table, Tooltip } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
 import type { TableColumnProps } from "antd";
-import useAuth from "@/hook/useAuth";
-import { setCurrentUser } from "@/actions/authAcion";
-import { useRouter } from "next/navigation";
+import CreateTask from "./createtask";
+import axios from "axios";
+import { BackendURL } from "@/utils/untile";
+import TaskView from "./taskview";
 
-interface DataType {
+export interface DataType {
   _id: string;
   index: number;
   title: string;
 }
 
 export default function TaskManagement() {
-  const router = useRouter();
-  const { isLoggedIn, user, login } = useAuth();
   const [viewTaskModalVisible, setViewTaskModalVisible] = useState(false);
-  const [viewTask, setViewTask] = useState<DataType | null>(null);
+  const [viewTask, setViewTask] = useState<DataType>();
+  const [newTaskModalshow, setNewTaskModalshow] = useState(true);
+  const [tasks, setTasks] = useState<DataType[]>();
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      router.push("/"); // Redirect to home if not authenticated
-    } else {
-      const user = setCurrentUser();
-      login(user);
-    }
-  }, [isLoggedIn, login, router]);
+    const getTaskList = async () => {
+      const { data } = await axios.get(BackendURL + "/task/getTask");
+      console.log(data);
+
+      const newData: DataType[] = data.map((item: any, index: number) => ({
+        _id: item._id,
+        title: item.title,
+        index: index + 1,
+      }));
+      setTasks(newData);
+    };
+    getTaskList();
+  }, []);
 
   const columns: TableColumnProps<DataType>[] = [
     {
@@ -65,7 +72,6 @@ export default function TaskManagement() {
                 shape="circle"
                 icon={<DeleteOutlined style={{ color: "#f5222d" }} />}
                 className="action-button"
-                // onClick={() => handleDelete(record.id)}
               />
             </Tooltip>
           </div>
@@ -74,26 +80,13 @@ export default function TaskManagement() {
     },
   ];
 
-  const tasks = [
-    {
-      _id: "1231123",
-      index: 1,
-      title: "first",
-    },
-    {
-      _id: "674545",
-      index: 2,
-      title: "second",
-    },
-  ];
-
-  const handleViewTaskCancel = () => {
-    setViewTaskModalVisible(false);
-  };
-
   const handleView = (record: DataType) => {
     setViewTask(record);
     setViewTaskModalVisible(true);
+  };
+
+  const showNewTaskModal = () => {
+    setNewTaskModalshow(!newTaskModalshow);
   };
 
   return (
@@ -111,7 +104,7 @@ export default function TaskManagement() {
         },
       }}
     >
-      <Layout className="w-full min-h-screen bg-[#424242] p-5 ">
+      <Layout className="w-full h-[872px] bg-[#424242] p-5 relative">
         <Content className="px-5 py-8 grow bg-[#333333] rounded-[20px]">
           <div className="text-[#DDDDDD] text-2xl text-center mb-8">
             Task Management
@@ -124,16 +117,25 @@ export default function TaskManagement() {
             scroll={{ x: true }}
             pagination={false}
           />
+          <Button
+            type="primary"
+            className="mt-[20px] flex justify-self-end"
+            onClick={() => showNewTaskModal()}
+          >
+            Create Task
+          </Button>
         </Content>
-        <Modal
-          title="Task Details"
-          open={viewTaskModalVisible}
-          onCancel={handleViewTaskCancel}
-          footer={null}
-          className="rounded-lg p-2"
-        >
-          {<div className="">{viewTask?._id}</div>}
-        </Modal>
+        <TaskView
+          viewTaskModalVisible={viewTaskModalVisible}
+          setViewTaskModalVisible={setViewTaskModalVisible}
+          viewTask={viewTask}
+        />
+        {!newTaskModalshow && (
+          <CreateTask
+            setNewTaskView={setNewTaskModalshow}
+            newTaskView={newTaskModalshow}
+          />
+        )}
       </Layout>
     </ConfigProvider>
   );

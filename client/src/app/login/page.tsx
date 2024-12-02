@@ -5,9 +5,9 @@ import { Button, Input } from "antd";
 import { useState } from "react";
 import useAuth from "@/hook/useAuth";
 import { useRouter } from "next/navigation";
+import { PayProps, UserProps } from "@/utils/interfacelist";
 export default function Login() {
   const { login } = useAuth();
-
 
   const navigate = useRouter();
   const [userdata, setUserdata] = useState({
@@ -19,13 +19,13 @@ export default function Login() {
   };
 
   const handleSub = async () => {
-    const res = await authLogin(userdata);
+    const res: PayProps = await authLogin(userdata);
     console.log(res);
-    if (res) {
-      await login(res);
+    if (res.status) {
+      login(res.decoded);
       navigate.push("/profile");
-     
     } else {
+      alert(res.message);
     }
   };
   return (

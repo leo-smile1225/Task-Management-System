@@ -11,8 +11,9 @@ export const metadata: Metadata = {
 
 const navbar = <Navbar />;
 const sidebar = <Sidebar />;
-export default function RootLayout({children,}: Readonly<{  children: React.ReactNode;}>) {
-
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body>

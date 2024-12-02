@@ -17,16 +17,15 @@ export const authRegister = async (userdata: userRegInterface) => {
 
 export const authLogin = async (userdata: userLogInterface) => {
   const { data } = await axios.post(LoginURL, userdata);
-  console.log(data);
   if (data.token) {
     const decoded = jwtDecode(data.token);
     setAuthToken(data.token);
     setSession(data.token);
-    return {status : true, decoded: decoded };
+    return { status: true, decoded: decoded };
   } else {
     setAuthToken("");
     setSession("");
-    return {status : false,message : data.message};
+    return { status: false, message: data.message };
   }
 };
 const setSession = (serviceToken?: string | null) => {
@@ -44,7 +43,7 @@ export const setCurrentUser = () => {
     const decoded = jwtDecode(storedData);
     return decoded;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return null;
   }
 };
@@ -61,6 +60,6 @@ export const createGroup = async (
 
 export const getAllGroup = async () => {
   const { data } = await axios.get(getAllGroupURL);
-  console.log(data);  
+  console.log(data);
   return data;
 };

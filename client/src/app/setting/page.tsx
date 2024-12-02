@@ -11,15 +11,14 @@ import {
 import { Avatar, Input, Flex, Select, Button } from "antd";
 import { useEffect, useState } from "react";
 const Setting = () => {
-  const { user, login } = useAuth();
+  const { user } = useAuth();
   const [newGroup, setGroup] = useState("");
   const [grouplist, setGroupList] = useState<GroupListItem[]>([]);
   useEffect(() => {
     const initF = async () => {
-      const user:GetuserProps = await setCurrentUser(); // JwtPayload | null
-      if (user) login(user);
       const groups: Group[] = await getAllGroup(); // Adjust the type based on the return structure of this function
-      if (!groups) return;
+      if (!Array.isArray(groups) || groups.length === 0) return;
+
       const temp: GroupListItem[] = groups.map((value) => ({
         value: value.name,
         label: value.name,
@@ -36,7 +35,11 @@ const Setting = () => {
   return (
     <div>
       <div className="bg-[#333333] flex gap-2 m-5 justify-between p-5 rounded-xl">
-        <Avatar shape="square" size={128} icon={<UserOutlined />} />
+        {user?.avatar ? (
+          <Avatar shape="square" size={64} src={user.avatar} />
+        ) : (
+          <Avatar shape="square" size={64} icon={<UserOutlined />} />
+        )}
         <Flex gap="middle" vertical>
           <Input
             placeholder="Email"
@@ -72,7 +75,7 @@ const Setting = () => {
               placeholder="Select a Group"
               // onChange={handleChange}
               options={grouplist}
-              value={user?.groupID}
+              // value={user?.groupID}
             />
           )}
           <Button type="primary" variant="solid" onClick={handleChange}>

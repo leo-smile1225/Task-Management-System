@@ -9,14 +9,8 @@ import { useEffect, useState } from "react";
 
 const Profile = () => {
   const [text, setText] = useState("");
-  const { user, login } = useAuth();
-  const initF = async () => {
-    const user: GetuserProps = await setCurrentUser(); // JwtPayload | null
-    if (user) login(user);
-  };
-  useEffect(() => {
-    initF();
-  }, []);
+  const { user } = useAuth();
+
   const reporthandle = async () => {
     const res = await reportsend(text, user?._id);
     if (res) {

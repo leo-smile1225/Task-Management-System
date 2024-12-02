@@ -3,13 +3,22 @@ import { authRegister } from "@/actions/authAcion";
 import {
   LockOutlined,
   MailOutlined,
+  UploadOutlined,
   UserOutlined,
   UserSwitchOutlined,
   //   UserSwitchOutlined,
 } from "@ant-design/icons";
-// import { Select } from "antd";
 
-import { Button, ConfigProvider, Input, Select } from "antd";
+import {
+  Avatar,
+  Button,
+  ConfigProvider,
+  Input,
+  message,
+  Select,
+  Upload,
+} from "antd";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 const Register = () => {
@@ -21,7 +30,36 @@ const Register = () => {
     password: "",
     password2: "",
     role: "member",
+    avatar: "",
   });
+  const handleChangeavatar = async (info: any) => {
+    if (info.file.status === "done") {
+      message.success(`${info.file.name} file uploaded successfully`);
+      setUserdata({ ...userdata, avatar: info.file.response.url }); // Assuming the server returns the image URL
+    } else if (info.file.status === "error") {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  };
+
+  const customRequest = async ({ file, onSuccess, onError }: any) => {
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      onSuccess(response.data);
+    } catch (error) {
+      onError(error);
+    }
+  };
   const handleStateChange = (
     event: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -61,7 +99,20 @@ const Register = () => {
     >
       <div className="w-full bg-[#999999] h-[932px]">
         <p className="text-[32px] text-center pt-[131px]">Sign Up</p>
-        <div className="px-[50px] flex flex-col gap-[50px] mt-[39px]">
+        <div className="px-[50px] flex flex-col gap-[20px] mt-[39px]">
+          <div className="flex justify-center">
+            <Upload
+              customRequest={customRequest}
+              onChange={handleChangeavatar}
+              showUploadList={false}
+            >
+              {userdata.avatar ? (
+                <Avatar size={64} src={userdata.avatar} />
+              ) : (
+                <Avatar size={64} icon={<UserOutlined />} />
+              )}
+            </Upload>
+          </div>
           <div className="flex  border-[1px] border-white rounded-[10px]">
             <UserOutlined className="border-r border-r-white px-[15px]" />
             <Input

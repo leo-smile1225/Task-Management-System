@@ -1,81 +1,79 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ConfigProvider, Switch, Table } from "antd";
+import { ConfigProvider, Select, Switch, Table } from "antd";
 import type { TableColumnsType } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { allowUser, getAllUser } from "@/actions/adminAcion";
 import { setCurrentUser } from "@/actions/authAcion";
 import setAuthToken from "@/utils/setAuthToken";
+import { getAllSubtask, updateTaskStatus } from "@/actions/memberaction";
+import useAuth from "@/hook/useAuth";
 
-const App: React.FC = () => {
-  const [dataSource, setData] = useState<DataType[]>([]); // Initialize as an empty array
+const Task: React.FC = () => {
+  const { user } = useAuth();
+  const [dataSource, setData] = useState<DataType[]>([]);
 
-  const handleAllow = (index: number, id: React.Key, checked: boolean) => {
-    console.log(`switch to ${checked} ${id}`);
+  const handleChange = (index: number, id: string, value: string) => {
+    console.log(`switch to ${value} ${id}`);
     setData((prevData) => {
       const updatedData = [...prevData]; // Create a copy of the previous data
-      updatedData[index] = { ...updatedData[index], allowed: checked };
+      updatedData[index] = { ...updatedData[index], status: value };
       return updatedData; // Return the updated data array
     });
-    allowUser(id, checked);
+    updateTaskStatus({ _id: id, status: value });
   };
 
   interface DataType {
-    _id: React.Key;
-    email: string;
-    username: string;
-    allowed: boolean;
+    _id: string;
+    title: string;
+    status: string;
   }
 
   const columns: TableColumnsType<DataType> = [
     {
-      title: "Email",
+      title: "title",
       width: 100,
-      dataIndex: "email",
+      dataIndex: "title",
       key: "1",
       sorter: true,
       fixed: "left",
     },
     {
-      title: "Username",
-      width: 100,
-      dataIndex: "username",
-      key: "2",
-      fixed: "left",
-      sorter: true,
-    },
-    {
-      title: "Allow State",
-      dataIndex: "allowed", // Corrected to match the property in DataType
+      title: "Working State",
+      dataIndex: "status", // Corrected to match the property in DataType
       key: "3",
       render: (_, record: DataType, index: number) => {
         return (
           <div>
-            <Switch
-              checkedChildren={<CheckOutlined />}
-              unCheckedChildren={<CloseOutlined />}
-              checked={record.allowed} // Use 'checked' instead of 'value'
-              onChange={(checked) => handleAllow(index, record._id, checked)}
+            <Select
+              className="w-full h-[50px] text-[16px] border-0 rounded-tr-[10px] rounded-tl-none rounded-bl-none"
+              value={record.status}
+              onChange={(value) => handleChange(index, record._id, value)}
+              options={[
+                { value: "pending", label: "pending" },
+                { value: "in_progress", label: "in_progress" },
+                { value: "completed", label: "completed" },
+              ]}
             />
           </div>
         );
       },
     },
   ];
-
   useEffect(() => {
-    // const d: string | null = localStorage.getItem("usertoken");
-    // setAuthToken(d);
     const fetchData = async () => {
       try {
-        const res = await getAllUser("");
-        setData(res);
+        if (user?._id) {
+          console.log("=>", user);
+          const res = await getAllSubtask(user?._id);
+          setData(res);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [user?._id]);
 
   return (
     <div className="p-[10px]">
@@ -105,4 +103,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Task;

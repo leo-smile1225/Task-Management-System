@@ -11,6 +11,7 @@ export const getUrl = (url: string) => {
   else if (url.includes("membermanagement")) return "User management";
   else if (url.includes("taskmanagement")) return "Task management";
   else if (url.includes("task")) return "Task";
+  else if (url.includes("chat")) return "Chat";
 };
 
 // export const BackendURL = "http://127.0.0.1:5000/api";

@@ -57,3 +57,14 @@ const io = socket(server, {
 });
 
 const onlineUsers = new Map();
+
+//chat socket
+
+io.on("connection", (socket) => {
+  console.log("connect to socket", socket.id);
+  global.chatSocket = socket;
+
+  socket.on("msg-send", (data) => {
+    io.emit("msg-receive", data);
+  });
+});

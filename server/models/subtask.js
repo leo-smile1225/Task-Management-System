@@ -1,22 +1,23 @@
 const mongoose = require("mongoose");
 
-const subtaskSchema = new mongoose.Schema(
-  {
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    status: {
-      type: String,
-      enum: ["pending", "in_progress", "completed"],
-      default: "pending",
-    },
-    taskId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "task",
-      required: true,
-    },
-    assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "user" }, // Optional: if subtasks can be assigned to users
+const subtaskSchema = new mongoose.Schema({
+  task_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "task",
+    required: true,
   },
-  { timestamps: true }
-);
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  status: {
+    type: String,
+    enum: ["pending", "in_progress", "completed"],
+    default: "pending",
+  },
+  assignedTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    deafault: null,
+  },
+});
 
 module.exports = mongoose.model("subtask", subtaskSchema);

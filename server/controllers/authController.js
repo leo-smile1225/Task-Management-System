@@ -28,6 +28,7 @@ const signin = async (req, res, next) => {
             email: data.email,
             username: data.username,
             role: data.role,
+            avatar: data.avatar,
             status: {
               currentStatus: data.status.currentStatus,
               currentEarning: data.status.currentEarning,
@@ -38,7 +39,7 @@ const signin = async (req, res, next) => {
           {
             algorithm: "HS256",
             allowInsecureKeySizes: true,
-            expiresIn: 86400, // 24 hours
+            expiresIn: "24h", // 24 hours
           }
         );
         const token = "Bearer " + toke;
@@ -73,6 +74,8 @@ const signup = async (req, res) => {
         currentEarning: req.body.currentEarning,
         expectedEarning: req.body.expectedEarning,
       },
+      avatar: req.body.avatar,
+
       role: req.body.role,
       allowed: req.body.allow,
     });
@@ -111,8 +114,6 @@ const allowUser = async (req, res) => {
 const updateUser = async (req, res, next) => {
   try {
     const data = req.body;
-    // console.log("requset", data);
-    // console;
     await User.findByIdAndUpdate(data._id, {
       status: {
         currentStatus: req.body.status.currentStatus,

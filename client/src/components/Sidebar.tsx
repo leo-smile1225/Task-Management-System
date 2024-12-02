@@ -24,11 +24,7 @@ const Sidebar: React.FC = () => {
     },
     {
       key: 3,
-      label: <Link href="/tasks">Tasks</Link>,
-    },
-    {
-      key: 4,
-      label: <Link href="/chat">Chat</Link>,
+      label: <Link href="/task">Tasks</Link>,
     },
     {
       key: 5,
@@ -56,6 +52,14 @@ const Sidebar: React.FC = () => {
       key: 1,
       label: <Link href="/setting">Setting</Link>,
     },
+    {
+      key: 2,
+      label: (
+        <Link href="#" onClick={logout}>
+          Sign Out
+        </Link>
+      ),
+    },
   ];
   const leaderitems = [
     {
@@ -69,14 +73,6 @@ const Sidebar: React.FC = () => {
     {
       key: 2,
       label: <Link href="/notification">Notification</Link>,
-    },
-    {
-      key: 3,
-      label: <Link href="/tasks">Tasks</Link>,
-    },
-    {
-      key: 4,
-      label: <Link href="/chat">Chat</Link>,
     },
     {
       key: 5,
@@ -118,7 +114,11 @@ const Sidebar: React.FC = () => {
       >
         <div className="w-[300px] bg-[#3F51B5] h-[932px] text-white py-[135px] pl-[34px]">
           <div className="flex flex-col gap-[10px]">
-            <Avatar shape="square" size={128} icon={<UserOutlined />} />
+            {user?.avatar ? (
+              <Avatar shape="square" size={64} src={user.avatar} />
+            ) : (
+              <Avatar shape="square" size={64} icon={<UserOutlined />} />
+            )}
             <p className="text-[18px]">{user?.username}</p>
             <p className="text-[16px]">{user?.email}</p>
           </div>

@@ -1,11 +1,12 @@
 "use client";
+import { Upload, message } from "antd";
 import { authLogin } from "@/actions/authAcion";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Input } from "antd";
 import { useState } from "react";
 import useAuth from "@/hook/useAuth";
 import { useRouter } from "next/navigation";
-import { PayProps, UserProps } from "@/utils/interfacelist";
+import { PayProps } from "@/utils/interfacelist";
 export default function Login() {
   const { login } = useAuth();
 
@@ -20,12 +21,12 @@ export default function Login() {
 
   const handleSub = async () => {
     const res: PayProps = await authLogin(userdata);
-    console.log(res);
     if (res.status) {
       login(res.decoded);
-      navigate.push("/profile");
+      message.success(`Login successfully`);
+      navigate.push("/dashboard");
     } else {
-      alert(res.message);
+      message.warning(`Login Failed`);
     }
   };
   return (

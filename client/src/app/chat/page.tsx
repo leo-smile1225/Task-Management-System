@@ -1,6 +1,5 @@
 "use client";
 import useAuth from "@/hook/useAuth";
-import { BackendURL } from "@/utils/untile";
 import { Button } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
@@ -12,60 +11,24 @@ interface MSGTYPE {
   content: string;
 }
 const APP_HOST = "http://192.168.142.171:5000";
-const List: MSGTYPE[] = [
-  {
-    avatar: "BB",
-    username: "user1",
-    time: "12:00:00",
-    content: "hello, boss",
-  },
-  {
-    avatar: "UU",
-    username: "user2",
-    time: "12:08:00",
-    content: "hi, user1 laksjdflkj alskdfj lsk fpsod flakjdsf p sdoifj woif ",
-  },
-  {
-    avatar: "NN",
-    username: "user3",
-    time: "12:28:00",
-    content: "hi, user1 laksjdflkj alskdfj lsk fpsod flakjdsf p sdoifj woif ",
-  },
-  {
-    avatar: "YY",
-    username: "user3",
-    time: "12:28:00",
-    content: "hi, user1 laksjdflkj alskdfj lsk fpsod flakjdsf p sdoifj woif ",
-  },
-  {
-    avatar: "DD",
-    username: "user3",
-    time: "12:28:00",
-    content: "hi, user1 laksjdflkj alskdfj lsk fpsod flakjdsf p sdoifj woif ",
-  },
-  {
-    avatar: "CC",
-    username: "user3",
-    time: "12:28:00",
-    content: "hi, user1 laksjdflkj alskdfj lsk fpsod flakjdsf p sdoifj woif ",
-  },
-];
 
 const Chat: React.FC = () => {
-  const [msgList, setMsgList] = useState<MSGTYPE[]>(List);
+  const [msgList, setMsgList] = useState<MSGTYPE[]>([]); // Initialize as an empty array
   const { user } = useAuth();
   const [msgText, setMsgText] = useState<string>("");
-
   const socket = useRef<Socket>();
 
   useEffect(() => {
     socket.current = io(APP_HOST);
     socket.current.on("msg-receive", (msg) => {
       if (msg) {
-        setMsgList((msgList) => [...msgList, msg]);
+        setMsgList((prevMsgList) => [...prevMsgList, msg]); // Use prevMsgList for state update
       }
-      return socket.current?.off("msg-receive");
     });
+
+    return () => {
+      socket.current?.off("msg-receive"); // Clean up the socket listener on unmount
+    };
   }, []);
 
   const handlSend = () => {
@@ -82,6 +45,7 @@ const Chat: React.FC = () => {
       (date.getSeconds().toString().length < 2
         ? "0" + date.getSeconds().toString()
         : date.getSeconds().toString());
+
     const newMsg: MSGTYPE = {
       avatar: "AA",
       username: user?.username,
@@ -89,6 +53,7 @@ const Chat: React.FC = () => {
       content: msgText,
     };
     socket.current?.emit("msg-send", newMsg);
+    setMsgText(""); // Clear the input after sending
   };
 
   return (

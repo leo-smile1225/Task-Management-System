@@ -1,58 +1,22 @@
 "use client";
 import useAuth from "@/hook/useAuth";
 import { BackendURL } from "@/utils/untile";
-import { Button } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import { Avatar, Button } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
 
 interface MSGTYPE {
-  avatar: string;
+  avatar: string | undefined;
   username: string | undefined;
   time: string;
   content: string;
 }
 const APP_HOST = "http://192.168.142.171:5000";
-const List: MSGTYPE[] = [
-  {
-    avatar: "BB",
-    username: "user1",
-    time: "12:00:00",
-    content: "hello, boss",
-  },
-  {
-    avatar: "UU",
-    username: "user2",
-    time: "12:08:00",
-    content: "hi, user1 laksjdflkj alskdfj lsk fpsod flakjdsf p sdoifj woif ",
-  },
-  {
-    avatar: "NN",
-    username: "user3",
-    time: "12:28:00",
-    content: "hi, user1 laksjdflkj alskdfj lsk fpsod flakjdsf p sdoifj woif ",
-  },
-  {
-    avatar: "YY",
-    username: "user3",
-    time: "12:28:00",
-    content: "hi, user1 laksjdflkj alskdfj lsk fpsod flakjdsf p sdoifj woif ",
-  },
-  {
-    avatar: "DD",
-    username: "user3",
-    time: "12:28:00",
-    content: "hi, user1 laksjdflkj alskdfj lsk fpsod flakjdsf p sdoifj woif ",
-  },
-  {
-    avatar: "CC",
-    username: "user3",
-    time: "12:28:00",
-    content: "hi, user1 laksjdflkj alskdfj lsk fpsod flakjdsf p sdoifj woif ",
-  },
-];
+
 
 const Chat: React.FC = () => {
-  const [msgList, setMsgList] = useState<MSGTYPE[]>(List);
+  const [msgList, setMsgList] = useState<MSGTYPE[]>([]);
   const { user } = useAuth();
   const [msgText, setMsgText] = useState<string>("");
 
@@ -83,7 +47,7 @@ const Chat: React.FC = () => {
         ? "0" + date.getSeconds().toString()
         : date.getSeconds().toString());
     const newMsg: MSGTYPE = {
-      avatar: "AA",
+      avatar: user?.avatar,
       username: user?.username,
       time: currentTime,
       content: msgText,
@@ -94,7 +58,7 @@ const Chat: React.FC = () => {
   return (
     <div className="w-full min-h-[872px] bg-[#424242] p-5 flex flex-col justify-between">
       <div className="flex flex-col h-[750px] overflow-auto">
-        {msgList.map((item, index) => (
+        {msgList && msgList.map((item, index) => (
           <div key={index}>
             <div
               className={
@@ -102,8 +66,13 @@ const Chat: React.FC = () => {
                 (index % 2 === 1 ? "flex-row-reverse" : "")
               }
             >
-              {item.avatar}
-              <div className="flex flex-col w-[90%]">
+              {item.avatar ? (
+                <Avatar size={64} src={item.avatar}/>
+              ) : (
+                <Avatar size={64} icon={<UserOutlined />} />
+              )}
+              
+              <div className="flex flex-col grow">
                 <div
                   className={
                     "text-[#DDDDDD] text-[20px] " +

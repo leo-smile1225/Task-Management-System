@@ -37,7 +37,10 @@ const createTask = async (req, res, next) => {
 
 const getTask = async (req, res, next) => {
   try {
-    const tasks = await Task.find({ _id: { $ne: req.params.id } });
+    const tasks = await Task.find(
+      { _id: { $ne: req.params.id } },
+      { title: 1, description: 1 }
+    );
     console.log(tasks);
     return res.json(tasks);
   } catch (error) {

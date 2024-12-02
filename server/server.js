@@ -35,7 +35,7 @@ const PORT = process.env.PORT || 5000;
 app.post("/upload", upload.single("avatar"), (req, res) => {
   console.log(req.file.filename);
   if (req.file) {
-    res.json({ url: `http://localhost:${PORT}/${req.file.filename}` });
+    res.json({ url: `http://192.168.142.171:${PORT}/${req.file.filename}` });
   } else {
     res.status(400).json({ error: "No file uploaded" });
   }

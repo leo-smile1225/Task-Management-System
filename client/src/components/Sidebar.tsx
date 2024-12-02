@@ -27,6 +27,10 @@ const Sidebar: React.FC = () => {
       label: <Link href="/task">Tasks</Link>,
     },
     {
+      key: 4,
+      label: <Link href="/chat">Chat</Link>,
+    },
+    {
       key: 5,
       label: <Link href="/calendar">Calendar</Link>,
     },
@@ -73,6 +77,10 @@ const Sidebar: React.FC = () => {
     {
       key: 2,
       label: <Link href="/notification">Notification</Link>,
+    },
+    {
+      key: 4,
+      label: <Link href="/chat">Chat</Link>,
     },
     {
       key: 5,

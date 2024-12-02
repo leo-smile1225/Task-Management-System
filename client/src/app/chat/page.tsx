@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
 
 interface MSGTYPE {
-  avatar: string;
+  avatar: string | undefined;
   username: string | undefined;
   time: string;
   content: string;
@@ -47,7 +47,7 @@ const Chat: React.FC = () => {
         : date.getSeconds().toString());
 
     const newMsg: MSGTYPE = {
-      avatar: "AA",
+      avatar: user?.avatar,
       username: user?.username,
       time: currentTime,
       content: msgText,
@@ -59,36 +59,44 @@ const Chat: React.FC = () => {
   return (
     <div className="w-full min-h-[872px] bg-[#424242] p-5 flex flex-col justify-between">
       <div className="flex flex-col h-[750px] overflow-auto">
-        {msgList.map((item, index) => (
-          <div key={index}>
-            <div
-              className={
-                "py-2 px-4 bg-[#333333] rounded-[10px] flex gap-5 items-center " +
-                (index % 2 === 1 ? "flex-row-reverse" : "")
-              }
-            >
-              {item.avatar}
-              <div className="flex flex-col w-[90%]">
-                <div
-                  className={
-                    "text-[#DDDDDD] text-[20px] " +
-                    (index % 2 === 1 ? "text-right" : "")
-                  }
-                >
-                  {item.username}
+        {msgList &&
+          msgList.map((item, index) => (
+            <div key={index}>
+              <div
+                className={
+                  "py-2 px-4 bg-[#333333] rounded-[10px] flex gap-5 items-center " +
+                  (index % 2 === 1 ? "flex-row-reverse" : "")
+                }
+              >
+                {item.avatar ? (
+                  <Avatar size={64} src={item.avatar} />
+                ) : (
+                  <Avatar size={64} icon={<UserOutlined />} />
+                )}
+
+                <div className="flex flex-col grow">
+                  <div
+                    className={
+                      "text-[#DDDDDD] text-[20px] " +
+                      (index % 2 === 1 ? "text-right" : "")
+                    }
+                  >
+                    {item.username}
+                  </div>
+                  <div className="text-[#BDBDBD] text-[16px]">
+                    {item.content}
+                  </div>
                 </div>
-                <div className="text-[#BDBDBD] text-[16px]">{item.content}</div>
+              </div>
+              <div
+                className={
+                  "mt-2 text-[#BDBDBD] " + (index % 2 === 1 ? "text-right" : "")
+                }
+              >
+                {item.time}
               </div>
             </div>
-            <div
-              className={
-                "mt-2 text-[#BDBDBD] " + (index % 2 === 1 ? "text-right" : "")
-              }
-            >
-              {item.time}
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
       <div className="flex items-center bg-[#333333] p-3 rounded-md">
         <input

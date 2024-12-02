@@ -3,41 +3,11 @@ import { ReactElement, useEffect, useState } from "react";
 import TaskStatus from "./taskstatus";
 import { redirect } from "next/navigation";
 import TaskSelect from "./taskselect";
-import SubTaskDetail from "./subtaskdetail";
 import axios from "axios";
-import { BackendURL } from "@/utils/untile";
-import { DataType } from "../taskmanagement/page";
+import { BackendURL, getAllUsersURL } from "@/utils/untile";
 import { MemberType } from "../taskmanagement/createtask";
-
-const avatars: ReactElement[] = [
-  <svg width="60" height="60" viewBox="0 0 60 60" key={0}>
-    <rect id="_1" data-name="1" width="60" height="60" rx="10" fill="#999" />
-  </svg>,
-  <svg width="60" height="60" viewBox="0 0 60 60" key={1}>
-    <rect id="_1" data-name="1" width="60" height="60" rx="10" fill="#999" />
-  </svg>,
-  <svg width="60" height="60" viewBox="0 0 60 60" key={2}>
-    <rect id="_1" data-name="1" width="60" height="60" rx="10" fill="#999" />
-  </svg>,
-  <svg width="60" height="60" viewBox="0 0 60 60" key={1}>
-    <rect id="_1" data-name="1" width="60" height="60" rx="10" fill="#999" />
-  </svg>,
-  <svg width="60" height="60" viewBox="0 0 60 60" key={2}>
-    <rect id="_1" data-name="1" width="60" height="60" rx="10" fill="#999" />
-  </svg>,
-  <svg width="60" height="60" viewBox="0 0 60 60" key={1}>
-    <rect id="_1" data-name="1" width="60" height="60" rx="10" fill="#999" />
-  </svg>,
-  <svg width="60" height="60" viewBox="0 0 60 60" key={2}>
-    <rect id="_1" data-name="1" width="60" height="60" rx="10" fill="#999" />
-  </svg>,
-  <svg width="60" height="60" viewBox="0 0 60 60" key={1}>
-    <rect id="_1" data-name="1" width="60" height="60" rx="10" fill="#999" />
-  </svg>,
-  <svg width="60" height="60" viewBox="0 0 60 60" key={2}>
-    <rect id="_1" data-name="1" width="60" height="60" rx="10" fill="#999" />
-  </svg>,
-];
+import { Avatar } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 const percentNumber: number[] = [20, 55, 25];
 
@@ -53,6 +23,7 @@ export default function Dashboard() {
     },
   ]);
   const [percent, setPercent] = useState<number[]>([0, 0, 0]);
+  const [avatars, setAvatars] = useState<string[]>([]);
 
   const hadleClickMembers = () => {
     if (!leader) return;
@@ -62,7 +33,7 @@ export default function Dashboard() {
   useEffect(() => {
     const getTaskList = async () => {
       const { data } = await axios.get(BackendURL + "/task/getTask");
-      const newData: MemberType[] = data.map((item: any, index: number) => ({
+      const newData: MemberType[] = data.map((item: any) => ({
         value: item._id,
         label: item.title,
       }));
@@ -70,6 +41,14 @@ export default function Dashboard() {
       setCurrentTaskId(newData[0].value);
     };
     getTaskList();
+    const getUser = async () => {
+      const { data } = await axios.post(getAllUsersURL, { type: "mng" });
+      const newAvatars : string[] = data.map((item:any)=>
+        item.avatar
+      )      
+      setAvatars(newAvatars);
+    };
+    getUser();
   }, []);
 
   useEffect(() => {
@@ -77,7 +56,7 @@ export default function Dashboard() {
       const { data } = await axios.post(BackendURL + "/task/getPercent", {
         task_id: currentTaskId,
       });
-      if (data.p == null) setPercent([0, 0, 0]);
+      if (data.p ) setPercent([0, 0, 0]);
       else setPercent([data.c, data.ps, data.p]);
     };
     getTaskPercent();
@@ -93,9 +72,13 @@ export default function Dashboard() {
           Group Members
         </div>
         <div className="w-full flex gap-2 overflow-auto px-2">
-          {avatars.map((item: ReactElement, index: number) => (
-            <div key={index}>{item}</div>
-          ))}
+          {avatars.map((item: string, index:number) => 
+            item ? (
+              <Avatar size={64} src={item} key={index}/>
+            ) : (
+              <Avatar size={64} icon={<UserOutlined />} key={index} />
+            )
+          )}
         </div>
         <div className="flex flex-col gap-3">
           <div className="text-[#DDDDDD] text-xl px-2">Statics</div>

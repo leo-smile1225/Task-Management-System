@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-const mongoAtlasUri = `mongodb://127.0.0.1:27017/Blog`;
+const mongoAtlasUri = `mongodb://127.0.0.1:27017/groupManageDB`;
 
 function mongooseConnection() {
   try {

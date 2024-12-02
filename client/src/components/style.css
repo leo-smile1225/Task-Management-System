@@ -1,0 +1,28 @@
+.sider {
+  animation-name: example;
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+}
+.nonesider {
+  animation-name: example1;
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+}
+
+@keyframes example {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 0px;
+  }
+}
+
+@keyframes example1 {
+  0% {
+    left: 0px;
+  }
+  100% {
+    left: -100%;
+  }
+}

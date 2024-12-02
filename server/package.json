@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
-    "dev": "nodemon server.js",
-    "prestart": "start mongod --dbpath ./db"
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +19,7 @@
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.29.4",
     "mongoose": "^6.6.3",
+    "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.7",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",

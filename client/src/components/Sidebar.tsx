@@ -7,6 +7,8 @@ import useSide from "@/hook/useSide";
 import useAuth from "@/hook/useAuth";
 
 const Sidebar: React.FC = () => {
+  const { isSideview, setShow } = useSide();
+  const { user, logout } = useAuth();
   const items = [
     {
       key: 0,
@@ -34,11 +36,69 @@ const Sidebar: React.FC = () => {
     },
     {
       key: 7,
-      label: <Link href="#">Sign Out</Link>,
+      label: (
+        <Link href="#" onClick={logout}>
+          Sign Out
+        </Link>
+      ),
     },
   ];
-  const { isSideview, setShow } = useSide();
-  const { user } = useAuth();
+  const adminitems = [
+    {
+      key: 0,
+      label: <Link href="/admin">Admin</Link>,
+    },
+    {
+      key: 1,
+      label: <Link href="/setting">Setting</Link>,
+    },
+  ];
+  const leaderitems = [
+    {
+      key: 0,
+      label: <Link href="/profile">Profile</Link>,
+    },
+    {
+      key: 1,
+      label: <Link href="/dashboard">Dashboard</Link>,
+    },
+    {
+      key: 2,
+      label: <Link href="/notification">Notification</Link>,
+    },
+    {
+      key: 3,
+      label: <Link href="/tasks">Tasks</Link>,
+    },
+    {
+      key: 5,
+      label: <Link href="/calendar">Calendar</Link>,
+    },
+    {
+      key: 6,
+      label: <Link href="/setting">Setting</Link>,
+    },
+    {
+      key: 7,
+      label: <Link href="/taskmanagement">Task Management</Link>,
+    },
+    {
+      key: 8,
+      label: <Link href="/membermanagement">User Management</Link>,
+    },
+    {
+      key: 9,
+      label: <Link href="/report">Report</Link>,
+    },
+    {
+      key: 10,
+      label: (
+        <Link href="#" onClick={logout}>
+          Sign Out
+        </Link>
+      ),
+    },
+  ];
   if (!isSideview) return <></>;
   else
     return (
@@ -56,7 +116,13 @@ const Sidebar: React.FC = () => {
           </div>
           <Menu
             className="bg-transparent text-[22px] mt-[20px]"
-            items={items}
+            items={
+              user?.role == "admin"
+                ? adminitems
+                : user?.role == "leader"
+                ? leaderitems
+                : items
+            }
             theme="dark"
             defaultSelectedKeys={["0"]}
             onClick={() => setShow(false)}

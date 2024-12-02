@@ -1,17 +1,13 @@
+import { userLogInterface, userRegInterface } from "@/utils/interfacelist";
 import setAuthToken from "@/utils/setAuthToken";
-import { LoginURL, RegisterURL } from "@/utils/untile";
+import {
+  getAllGroupURL,
+  groupcreateURL,
+  LoginURL,
+  RegisterURL,
+} from "@/utils/untile";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-interface userRegInterface {
-  email: string;
-  username: string;
-  password: string;
-  password2: string;
-}
-interface userLogInterface {
-  email: string;
-  password: string;
-}
 
 export const authRegister = async (userdata: userRegInterface) => {
   const { data } = await axios.post(RegisterURL, userdata);
@@ -26,11 +22,11 @@ export const authLogin = async (userdata: userLogInterface) => {
     const decoded = jwtDecode(data.token);
     setAuthToken(data.token);
     setSession(data.token);
-    return decoded;
+    return {status : true, decoded: decoded };
   } else {
     setAuthToken("");
     setSession("");
-    return data.message;
+    return {status : false,message : data.message};
   }
 };
 const setSession = (serviceToken?: string | null) => {
@@ -43,11 +39,28 @@ const setSession = (serviceToken?: string | null) => {
 export const setCurrentUser = () => {
   const storedData = localStorage.getItem("usertoken");
   console.log("=>", storedData);
-  const decoded = jwtDecode(storedData);
-
-  if (storedData) {
+  if (!storedData) return null;
+  try {
+    const decoded = jwtDecode(storedData);
     return decoded;
+  } catch (error) {
+    console.log(error)
+    return null;
   }
 };
 
-// export const getAllmember = async ()
+export const createGroup = async (
+  id: string | undefined,
+  groupName: string
+) => {
+  console.log(id, groupName);
+
+  const { data } = await axios.post(groupcreateURL, { id, groupName });
+  console.log(data);
+};
+
+export const getAllGroup = async () => {
+  const { data } = await axios.get(getAllGroupURL);
+  console.log(data);  
+  return data;
+};

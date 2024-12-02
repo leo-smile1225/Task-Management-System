@@ -20,7 +20,11 @@ const userSchema = new mongoose.Schema(
       currentEarning: { type: String, default: 0 },
       expectedEarning: { type: String, default: 0 },
     },
-    // groupId: { type: mongoose.Schema.Types.ObjectId, ref: "group" },
+    // groupId: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "group",
+    //   default: null,
+    // },
     allowed: { type: Boolean, default: false },
   },
   { timestamps: true }
